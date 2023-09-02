@@ -33,33 +33,30 @@ public class GameBetter implements IGame {
         System.out.println(currentPlayer.getName() + " is the current player");
         System.out.println("They have rolled a " + roll);
 
-        if (currentPlayer.isInJail()) {
-            if (roll % 2 != 0) {
-                currentPlayer.freeFromJail();
-
-                System.out.println(currentPlayer.getName() + " is getting out of the penalty box");
-                currentPlayer.moveForward(roll);
-
-                System.out.println(currentPlayer.getName()
-                        + "'s new location is "
-                        + currentPlayer.getPosition());
-                System.out.println("The category is " + Category.getCategoryForPosition(currentPlayer.getPosition()).getName());
-                askQuestion();
-            } else {
-                System.out.println(currentPlayer.getName() + " is not getting out of the penalty box");
-            }
-        } else {
-            currentPlayer.moveForward(roll);
-
-            System.out.println(currentPlayer.getName()
-                    + "'s new location is "
-                    + currentPlayer.getPosition());
-            System.out.println("The category is " + Category.getCategoryForPosition(currentPlayer.getPosition()).getName());
+        if (!currentPlayer.isInJail()) {
+            movePlayerForward(roll);
             askQuestion();
+            return;
+        }
+
+        if (roll % 2 != 0) {
+            System.out.println(currentPlayer.getName() + " is getting out of the penalty box");
+            currentPlayer.freeFromJail();
+            movePlayerForward(roll);
+            askQuestion();
+        } else {
+            System.out.println(currentPlayer.getName() + " is not getting out of the penalty box");
         }
     }
 
+    private void movePlayerForward(int roll) {
+        currentPlayer.moveForward(roll);
+        System.out.println(currentPlayer.getName() + "'s new location is " + currentPlayer.getPosition());
+    }
+
     private void askQuestion() {
+        System.out.println("The category is " + Category.getCategoryForPosition(currentPlayer.getPosition()).getName());
+
         switch (Category.getCategoryForPosition(currentPlayer.getPosition())) {
             case POP -> System.out.println(Decks.removeQuestionFromDeck(POP).getQuestionContent());
             case SCIENCE -> System.out.println(Decks.removeQuestionFromDeck(SCIENCE).getQuestionContent());
@@ -70,9 +67,7 @@ public class GameBetter implements IGame {
 
     public boolean wasCorrectlyAnswered() {
         if (currentPlayer.isInJail()) {
-            currentPlayerIndex++;
-            if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
-            currentPlayer = players.get(currentPlayerIndex);
+            nextTurn();
             return true;
         }
 
@@ -84,11 +79,15 @@ public class GameBetter implements IGame {
                 + " Gold Coins.");
 
         boolean winner = currentPlayer.hasNotWonYet();
+        nextTurn();
+
+        return winner;
+    }
+
+    private void nextTurn() {
         currentPlayerIndex++;
         if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
         currentPlayer = players.get(currentPlayerIndex);
-
-        return winner;
     }
 
     public boolean wrongAnswer() {
@@ -96,9 +95,7 @@ public class GameBetter implements IGame {
         System.out.println(currentPlayer.getName() + " was sent to the penalty box");
         currentPlayer.putInJail();
 
-        currentPlayerIndex++;
-        if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
-        currentPlayer = players.get(currentPlayerIndex);
+        nextTurn();
         return true;
     }
 }
