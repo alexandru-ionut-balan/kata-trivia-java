@@ -10,7 +10,7 @@ public enum Category {
 
     private final String name;
 
-    private static final List<Category> categories = List.of(
+    public static final List<Category> ALL_CATEGORIES = List.of(
             POP, SCIENCE, SPORTS, ROCK
     );
 
@@ -24,6 +24,6 @@ public enum Category {
 
     public static Category getCategoryForPosition(int position) {
         position = position % GameBetter.NUMBER_OF_CATEGORIES;
-        return categories.get(position);
+        return ALL_CATEGORIES.get(position);
     }
 }

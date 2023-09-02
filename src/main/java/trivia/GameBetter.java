@@ -1,29 +1,19 @@
 package trivia;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+
+import static trivia.Category.*;
 
 // REFACTOR ME
 public class GameBetter implements IGame {
     private final ArrayList<Player> players = new ArrayList<>();
     private int currentPlayerIndex = 0;
     private Player currentPlayer = null;
-    int[] places = new int[6];
-    LinkedList<String> popQuestions = new LinkedList<>();
-    LinkedList<String> scienceQuestions = new LinkedList<>();
-    LinkedList<String> sportsQuestions = new LinkedList<>();
-    LinkedList<String> rockQuestions = new LinkedList<>();
 
     public static final int NUMBER_OF_CATEGORIES = 4;
 
     public GameBetter() {
-
-        for (int i = 0; i < 50; i++) {
-            popQuestions.add("Pop Question " + i);
-            scienceQuestions.add("Science Question " + i);
-            sportsQuestions.add("Sports Question " + i);
-            rockQuestions.add("Rock Question " + i);
-        }
+        Category.ALL_CATEGORIES.forEach(category -> Decks.generateDeck(category, 50));
     }
 
     public boolean add(String playerName) {
@@ -37,10 +27,6 @@ public class GameBetter implements IGame {
         }
 
         return true;
-    }
-
-    public int howManyPlayers() {
-        return players.size();
     }
 
     public void roll(int roll) {
@@ -75,10 +61,10 @@ public class GameBetter implements IGame {
 
     private void askQuestion() {
         switch (Category.getCategoryForPosition(currentPlayer.getPosition())) {
-            case POP -> System.out.println(popQuestions.removeFirst());
-            case SCIENCE -> System.out.println(scienceQuestions.removeFirst());
-            case SPORTS -> System.out.println(sportsQuestions.removeFirst());
-            case ROCK -> System.out.println(rockQuestions.removeFirst());
+            case POP -> System.out.println(Decks.removeQuestionFromDeck(POP).getQuestionContent());
+            case SCIENCE -> System.out.println(Decks.removeQuestionFromDeck(SCIENCE).getQuestionContent());
+            case SPORTS -> System.out.println(Decks.removeQuestionFromDeck(SPORTS).getQuestionContent());
+            case ROCK -> System.out.println(Decks.removeQuestionFromDeck(ROCK).getQuestionContent());
         }
     }
 
