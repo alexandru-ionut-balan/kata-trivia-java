@@ -120,7 +120,7 @@ public class GameBetter implements IGame {
                                + currentPlayer.getCoins()
                                + " Gold Coins.");
 
-            boolean winner = didPlayerWin();
+            boolean winner = currentPlayer.hasNotWonYet();
             currentPlayerIndex++;
             if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
             currentPlayer = players.get(currentPlayerIndex);
@@ -143,7 +143,7 @@ public class GameBetter implements IGame {
                             + currentPlayer.getCoins()
                             + " Gold Coins.");
 
-         boolean winner = didPlayerWin();
+         boolean winner = currentPlayer.hasNotWonYet();
          currentPlayerIndex++;
          if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
          currentPlayer = players.get(currentPlayerIndex);
@@ -161,10 +161,5 @@ public class GameBetter implements IGame {
       if (currentPlayerIndex == players.size()) currentPlayerIndex = 0;
       currentPlayer = players.get(currentPlayerIndex);
       return true;
-   }
-
-
-   private boolean didPlayerWin() {
-      return !(currentPlayer.getCoins() == 6);
    }
 }

@@ -20,4 +20,8 @@ public class Player {
     public void addCoin() {
         this.coins++;
     }
+
+    public boolean hasNotWonYet() {
+        return this.coins < 6;
+    }
 }
