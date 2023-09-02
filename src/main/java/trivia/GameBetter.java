@@ -26,7 +26,6 @@ public class GameBetter implements IGame {
         if (currentPlayer == null) {
             currentPlayer = players.get(0);
         }
-
     }
 
     public void roll(int roll) {
@@ -73,10 +72,7 @@ public class GameBetter implements IGame {
 
         System.out.println("Answer was correct!!!!");
         currentPlayer.addCoin();
-        System.out.println(currentPlayer.getName()
-                + " now has "
-                + currentPlayer.getCoins()
-                + " Gold Coins.");
+        System.out.println(currentPlayer.getName() + " now has " + currentPlayer.getCoins() + " Gold Coins.");
 
         boolean winner = currentPlayer.hasNotWonYet();
         nextTurn();
@@ -93,9 +89,10 @@ public class GameBetter implements IGame {
     public boolean wrongAnswer() {
         System.out.println("Question was incorrectly answered");
         System.out.println(currentPlayer.getName() + " was sent to the penalty box");
-        currentPlayer.putInJail();
 
+        currentPlayer.putInJail();
         nextTurn();
+
         return true;
     }
 }
