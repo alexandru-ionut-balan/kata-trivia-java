@@ -7,6 +7,8 @@ public class Player {
 
     private boolean inJail = false;
 
+    private int position = 0;
+
     public Player(String name) {
         this.name = name;
     }
@@ -17,6 +19,17 @@ public class Player {
 
     public int getCoins() {
         return coins;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void moveForward(int positions) {
+        this.position+=positions;
+        if (this.position > GameBetter.NUMBER_OF_CATEGORIES * 3 - 1) {
+            this.position-= (GameBetter.NUMBER_OF_CATEGORIES * 3);
+        }
     }
 
     public boolean isInJail() {

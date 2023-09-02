@@ -9,29 +9,25 @@ public class GameBetter implements IGame {
     private int currentPlayerIndex = 0;
     private Player currentPlayer = null;
     int[] places = new int[6];
+    LinkedList<String> popQuestions = new LinkedList<>();
+    LinkedList<String> scienceQuestions = new LinkedList<>();
+    LinkedList<String> sportsQuestions = new LinkedList<>();
+    LinkedList<String> rockQuestions = new LinkedList<>();
 
-    LinkedList popQuestions = new LinkedList();
-    LinkedList scienceQuestions = new LinkedList();
-    LinkedList sportsQuestions = new LinkedList();
-    LinkedList rockQuestions = new LinkedList();
-    private boolean justGotOutOfJail;
+    public static final int NUMBER_OF_CATEGORIES = 4;
 
     public GameBetter() {
-        for (int i = 0; i < 50; i++) {
-            popQuestions.addLast("Pop Question " + i);
-            scienceQuestions.addLast(("Science Question " + i));
-            sportsQuestions.addLast(("Sports Question " + i));
-            rockQuestions.addLast(createRockQuestion(i));
-        }
-    }
 
-    public String createRockQuestion(int index) {
-        return "Rock Question " + index;
+        for (int i = 0; i < 50; i++) {
+            popQuestions.add("Pop Question " + i);
+            scienceQuestions.add("Science Question " + i);
+            sportsQuestions.add("Sports Question " + i);
+            rockQuestions.add("Rock Question " + i);
+        }
     }
 
     public boolean add(String playerName) {
         players.add(new Player(playerName));
-        places[howManyPlayers()] = 0;
 
         System.out.println(playerName + " was added");
         System.out.println("They are player number " + players.size());
@@ -56,55 +52,34 @@ public class GameBetter implements IGame {
                 currentPlayer.freeFromJail();
 
                 System.out.println(currentPlayer.getName() + " is getting out of the penalty box");
-                places[currentPlayerIndex] = places[currentPlayerIndex] + roll;
-                if (places[currentPlayerIndex] > 11) places[currentPlayerIndex] = places[currentPlayerIndex] - 12;
+                currentPlayer.moveForward(roll);
 
                 System.out.println(currentPlayer.getName()
                         + "'s new location is "
-                        + places[currentPlayerIndex]);
-                System.out.println("The category is " + currentCategory());
+                        + currentPlayer.getPosition());
+                System.out.println("The category is " + Category.getCategoryForPosition(currentPlayer.getPosition()).getName());
                 askQuestion();
             } else {
                 System.out.println(currentPlayer.getName() + " is not getting out of the penalty box");
             }
-
         } else {
-
-            places[currentPlayerIndex] = places[currentPlayerIndex] + roll;
-            if (places[currentPlayerIndex] > 11) places[currentPlayerIndex] = places[currentPlayerIndex] - 12;
+            currentPlayer.moveForward(roll);
 
             System.out.println(currentPlayer.getName()
                     + "'s new location is "
-                    + places[currentPlayerIndex]);
-            System.out.println("The category is " + currentCategory());
+                    + currentPlayer.getPosition());
+            System.out.println("The category is " + Category.getCategoryForPosition(currentPlayer.getPosition()).getName());
             askQuestion();
         }
-
     }
 
     private void askQuestion() {
-        if (currentCategory() == "Pop")
-            System.out.println(popQuestions.removeFirst());
-        if (currentCategory() == "Science")
-            System.out.println(scienceQuestions.removeFirst());
-        if (currentCategory() == "Sports")
-            System.out.println(sportsQuestions.removeFirst());
-        if (currentCategory() == "Rock")
-            System.out.println(rockQuestions.removeFirst());
-    }
-
-
-    private String currentCategory() {
-        if (places[currentPlayerIndex] == 0) return "Pop";
-        if (places[currentPlayerIndex] == 4) return "Pop";
-        if (places[currentPlayerIndex] == 8) return "Pop";
-        if (places[currentPlayerIndex] == 1) return "Science";
-        if (places[currentPlayerIndex] == 5) return "Science";
-        if (places[currentPlayerIndex] == 9) return "Science";
-        if (places[currentPlayerIndex] == 2) return "Sports";
-        if (places[currentPlayerIndex] == 6) return "Sports";
-        if (places[currentPlayerIndex] == 10) return "Sports";
-        return "Rock";
+        switch (Category.getCategoryForPosition(currentPlayer.getPosition())) {
+            case POP -> System.out.println(popQuestions.removeFirst());
+            case SCIENCE -> System.out.println(scienceQuestions.removeFirst());
+            case SPORTS -> System.out.println(sportsQuestions.removeFirst());
+            case ROCK -> System.out.println(rockQuestions.removeFirst());
+        }
     }
 
     public boolean wasCorrectlyAnswered() {
@@ -115,7 +90,7 @@ public class GameBetter implements IGame {
             return true;
         }
 
-        System.out.println("Answer was corrent!!!!");
+        System.out.println("Answer was correct!!!!");
         currentPlayer.addCoin();
         System.out.println(currentPlayer.getName()
                 + " now has "
