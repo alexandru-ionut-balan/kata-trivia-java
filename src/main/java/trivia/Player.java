@@ -5,6 +5,8 @@ public class Player {
 
     private int coins = 0;
 
+    private boolean inJail = false;
+
     public Player(String name) {
         this.name = name;
     }
@@ -15,6 +17,18 @@ public class Player {
 
     public int getCoins() {
         return coins;
+    }
+
+    public boolean isInJail() {
+        return inJail;
+    }
+
+    public void putInJail() {
+        this.inJail = true;
+    }
+
+    public void freeFromJail() {
+        this.inJail = false;
     }
 
     public void addCoin() {
