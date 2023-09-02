@@ -11,12 +11,13 @@ public class GameBetter implements IGame {
     private Player currentPlayer = null;
 
     public static final int NUMBER_OF_CATEGORIES = 4;
+    public static final int NUMBER_OF_QUESTIONS_PER_CATEGORY = 50;
 
     public GameBetter() {
-        Category.ALL_CATEGORIES.forEach(category -> Decks.generateDeck(category, 50));
+        Category.ALL_CATEGORIES.forEach(category -> Decks.generateDeck(category, NUMBER_OF_QUESTIONS_PER_CATEGORY));
     }
 
-    public boolean add(String playerName) {
+    public void add(String playerName) {
         players.add(new Player(playerName));
 
         System.out.println(playerName + " was added");
@@ -26,7 +27,6 @@ public class GameBetter implements IGame {
             currentPlayer = players.get(0);
         }
 
-        return true;
     }
 
     public void roll(int roll) {
